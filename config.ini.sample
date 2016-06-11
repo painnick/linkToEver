@@ -1,0 +1,11 @@
+[Instapaper]
+INSTAPAPER_KEY = {key}
+INSTAPAPER_SECRET = {secret}
+INSTAPAPER_LOGIN = {email}
+INSTAPAPER_PASSWORD = {password}
+
+[Readabilty]
+AUTH_TOKEN = {token}
+
+[Evernote]
+AUTH_TOKEN = {token}
