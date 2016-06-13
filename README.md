@@ -21,12 +21,12 @@ linkToEver는 Instapaper, Readabilty, Evernote를 이용합니다.
 
 이 프로그램을 이용하기 위해서는 아래와 같은 준비물이 필요합니다.
 
-1. Instapaper 계정 : https://www.instapaper.com/에 접속하여 계정을 생성합니다. Instapaper App 또는 링크 등을 통해 원하는 링크를 저장합니다.
-2. Instapaper App 등록 : 사용자가 등록한 링크를 linkToEver가 가져오기 위해서는 Instapaper API를 이용합니다. 해당 API를 사용하기 위해서는 https://www.instapaper.com/main/request_oauth_consumer_token에서 App을 등록해야 합니다.
-3. Readabilty 계정 생성 : API를 사용하기 위해 계정이 필요합니다.
-4. Readabilty App 등록 : https://www.readability.com/settings/account의 API Keys > Parser API Key를 확인합니다.
+1. Instapaper 계정 생성 : [Instapaper](https://www.instapaper.com/)에 접속하여 계정을 생성합니다. Instapaper App 또는 링크 등을 통해 원하는 링크를 저장합니다.
+2. Instapaper App 등록 : 사용자가 등록한 링크를 linkToEver가 가져오기 위해서는 Instapaper API를 이용합니다. 해당 API를 사용하기 위해서는 [Register New OAuth Application](https://www.instapaper.com/main/request_oauth_consumer_token)에서 App을 등록해야 합니다.
+3. Readabilty 계정 생성 : API를 사용하기 위해 [Readabilty](https://www.readability.com/)에서 계정을 생성합니다.
+4. Readabilty App 등록 : [설정](https://www.readability.com/settings/account)의 "API Keys > Parser API Key"를 확인합니다.
 5. Evernote 계정 생성 : 최종 저장소니까 당연히 필요합니다.
-6. Evernote App 등록 : https://dev.evernote.com/에서 "Get Started with the API"를 눌러 App을 등록합니다.
+6. Evernote App 등록 : [개발자 사이트](https://dev.evernote.com/)에서 "Get Started with the API"를 눌러 App을 등록합니다.
 
 # 설치
 ```bash
