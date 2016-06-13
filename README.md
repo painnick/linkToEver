@@ -1,4 +1,4 @@
-# linktToEver
+# linkToEver
 
 원하는 링크를 Evernote에 깔끔하게 저장하는 방법!
 
