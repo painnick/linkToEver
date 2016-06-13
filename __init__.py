@@ -36,6 +36,6 @@ if __name__ == '__main__':
     _bookmarks = instapaperutil.get_links(_instapaper, 30)
 
     for (idx, bookmark) in enumerate(_bookmarks):
-        print idx, bookmark.title, bookmark.url
-        save(bookmark.url, bookmark.title.encode('utf-8'))
+        print idx, bookmark.title.encode('utf-8'), bookmark.url.encode('utf-8')
+        save(bookmark.url.encode('utf-8'), bookmark.title.encode('utf-8'))
         instapaperutil.archive(bookmark)
