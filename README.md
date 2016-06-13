@@ -28,6 +28,12 @@ linkToEver는 Instapaper, Readabilty, Evernote를 이용합니다.
 5. Evernote 계정 생성 : 최종 저장소니까 당연히 필요합니다.
 6. Evernote App 등록 : https://dev.evernote.com/에서 "Get Started with the API"를 눌러 App을 등록합니다.
 
+# 설치
+```bash
+sudo apt-get install python-dev
+pip install -r required.txt
+```
+
 # 설정
 config.ini.sample 파일을 config.ini라는 이름으로 복사합니다. 그리고, 2,4,6항에서 수집한 API 인증 정보를 저장합니다.
 
