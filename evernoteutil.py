@@ -111,7 +111,7 @@ def _clean(note, soup, tag):
                 print eu
 
         # Remove some attributes
-        for attribute in ["class", "id", 'datetime', 'for', 'title']:
+        for attribute in ["class", "id", 'datetime', 'for', 'title', 'tabindex']:
             del tag[attribute]
 
         # Remove some tags
