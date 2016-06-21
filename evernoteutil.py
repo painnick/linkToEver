@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from evernote.api.client import EvernoteClient
 from urllib2 import URLError
 
-USE_SAND_BOX = False
+AUTH_TOKEN = None
 
 
 def save(title, url, html):
@@ -32,16 +32,13 @@ def _create_new_note(title, url):
     # purpose of exploring the API, you can get a developer token that allows
     # you to access your own Evernote account. To get a developer token, visit
     # https://sandbox.evernote.com/api/DeveloperToken.action
-    if USE_SAND_BOX:
-        auth_token = "S=s1:U=928db:E=15c56b718a9:C=154ff05e8d0:P=1cd:A=en-devtoken:V=2:H=44cbf7e4adc1c5bf32f7d17cbee5f49f"
-    else:
-        auth_token = "S=s62:U=66fb1a:E=15c56fdb5a6:C=154ff4c86f0:P=1cd:A=en-devtoken:V=2:H=5f95c8f9bc092da483bad78a0ed8afde"
+    auth_token = AUTH_TOKEN
 
     # Initial development is performed on our sandbox server. To use the production
     # service, change sandbox=False and replace your
     # developer token above with a token from
     # https://www.evernote.com/api/DeveloperToken.action
-    client = EvernoteClient(token=auth_token, sandbox=USE_SAND_BOX)
+    client = EvernoteClient(token=auth_token, sandbox=False)
 
     user_store = client.get_user_store()
 

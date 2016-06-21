@@ -6,6 +6,7 @@ import ConfigParser
 import evernoteutil
 import readabilityutil
 import instapaperutil
+import slackutil
 
 
 def loadConfig():
@@ -21,6 +22,9 @@ def loadConfig():
 
     evernoteutil.AUTH_TOKEN = config.get("Evernote", "AUTH_TOKEN")
 
+    slackutil.AUTH_TOKEN = config.get("Slack", "AUTH_TOKEN")
+    slackutil.CHANNEL = config.get("Slack", "CHANNEL")
+
 
 def save(_url, _title):
     html = readabilityutil.parse(_url)
@@ -31,11 +35,32 @@ if __name__ == '__main__':
 
     loadConfig()
 
-    _instapaper = instapaperutil.login();
+    slack_client = None
 
-    _bookmarks = instapaperutil.get_links(_instapaper, 30)
+    try:
+        slack_client = slackutil.login()
+    except Exception, e:
+        print e
+
+    try:
+        _instapaper = instapaperutil.login();
+        _bookmarks = instapaperutil.get_links(_instapaper, 30)
+    except Exception, e:
+        print e
+        if slackutil is not None:
+            slackutil.send_message(slack_client, "Cannot get instapaper links")
+        exit(-1)
 
     for (idx, bookmark) in enumerate(_bookmarks):
-        print idx, bookmark.title.encode('utf-8'), bookmark.url.encode('utf-8')
-        save(bookmark.url.encode('utf-8'), bookmark.title.encode('utf-8'))
-        instapaperutil.archive(bookmark)
+        title = bookmark.title.encode('utf-8')
+        link = bookmark.url.encode('utf-8')
+        print idx, title, link
+        try:
+            save(link, title)
+            instapaperutil.archive(bookmark)
+            if slackutil is not None:
+                slackutil.send_message(slack_client, "%s - %s" % (title, link))
+        except Exception, e:
+            print e
+            if slackutil is not None:
+                slackutil.send_message(slack_client, "Cannot save to evernote - %s" % (title))
