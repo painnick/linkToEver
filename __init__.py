@@ -39,12 +39,16 @@ if __name__ == '__main__':
 
     try:
         slack_client = slackutil.login()
+	print "Login slack."
     except Exception, e:
         print e
 
     try:
         _instapaper = instapaperutil.login();
+	print "Login instapaper."
+
         _bookmarks = instapaperutil.get_links(_instapaper, 30)
+	print "Get links."
     except Exception, e:
         print e
         if slackutil is not None:
@@ -59,8 +63,10 @@ if __name__ == '__main__':
             save(link, title)
             instapaperutil.archive(bookmark)
             if slackutil is not None:
+		print "Send slack message."
                 slackutil.send_message(slack_client, "%s - %s" % (title, link))
         except Exception, e:
             print e
             if slackutil is not None:
                 slackutil.send_message(slack_client, "Cannot save to evernote - %s" % (title))
+
