@@ -1,5 +1,6 @@
 import binascii
 import hashlib
+import logging
 import urllib2
 
 import evernote.edam.type.ttypes as Types
@@ -10,21 +11,24 @@ from urllib2 import URLError
 
 AUTH_TOKEN = None
 
+logging.config.fileConfig('log.config')
+logger = logging.getLogger('everLogger')
+
 
 def save(title, url, html):
     _note_store, _note = _create_new_note(title, url)
     _soup = BeautifulSoup(html, 'html.parser')
     _clean(_note, _soup, _soup)
 
-    print "==============================================================="
     _enml = _soup.prettify()  # str(_soup).replace('></en-media>', '/>')
 
-    try:
-        _save(_note_store, _note, _enml)
-    except Exception as e:
-        print title, url
-        print e
-        print _enml
+    logger = logging.getLogger('enmlLogger')
+    logger.debug("============================================================")
+    logger.debug("= URL : %s", url)
+    logger.debug("------------------------------------------------------------")
+    logger.debug("%s", _enml)
+
+    _save(_note_store, _note, _enml)
 
 
 def _create_new_note(title, url):
@@ -48,12 +52,12 @@ def _create_new_note(title, url):
         UserStoreConstants.EDAM_VERSION_MINOR
     )
     if not version_ok:
-        print "My Evernote API version is not up to date"
+        logger.error("My Evernote API version is not up to date")
         exit(1)
 
     note_store = client.get_note_store()
 
-    print "Creating a new note in the default notebook"
+    logger.info("Creating a new note in the default notebook(%s)", title)
 
     note = Types.Note()
     note.title = title
@@ -76,8 +80,8 @@ def _save(note_store, note, html):
     note.content += '</en-note>'
 
     created_note = note_store.createNote(note)
+    logger.info("Successfully created a new note with GUID: %s", created_note.guid)
 
-    print "Successfully created a new note with GUID: ", created_note.guid
     return created_note
 
 
@@ -105,10 +109,10 @@ def _clean(note, soup, tag):
                 new_tag.name = 'en-media'
                 tag.replace_with(new_tag)
             except URLError as eu:
-                print eu
+                logger.error('Cannot read image - %s : %s', eu, _src)
 
         # Remove some attributes
-        for attribute in ["class", "id", 'datetime', 'for', 'title', 'tabindex']:
+        for attribute in ["class", "id", 'datetime', 'for', 'title', 'tabindex', 'frame', 'rules']:
             del tag[attribute]
 
         # Remove some tags
@@ -121,7 +125,7 @@ def _clean(note, soup, tag):
 
 
 def _save_image(note, image_url):
-    print "Save", image_url
+    logger.debug('Save image - %s', image_url)
 
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36'

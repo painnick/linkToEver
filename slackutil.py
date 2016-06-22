@@ -1,18 +1,22 @@
+import logging
 import time
 
 import slackweb
 
 WEBHOOK = None
 
+logging.config.fileConfig('log.config')
+logger = logging.getLogger('slackLogger')
+
 
 def message(title, link):
     attachments = [
         {
-            "fallback": "Save links to Evernote.",
-            "color": "good",
-            "title": title,
-            "title_link": link,
-            "text": link
+            'fallback': 'Save links to Evernote.',
+            'color': 'good',
+            'title': title,
+            'title_link': link,
+            'text': link
         }
     ]
     _hook(attachments)
@@ -21,10 +25,10 @@ def message(title, link):
 def warning(msg):
     attachments = [
         {
-            "fallback": msg,
-            "color": "warning",
-            "text": msg,
-            "ts": time.time()
+            'fallback': msg,
+            'color': 'warning',
+            'text': msg,
+            'ts': time.time()
         }
     ]
     _hook(attachments)
@@ -33,10 +37,10 @@ def warning(msg):
 def danger(msg):
     attachments = [
         {
-            "fallback": msg,
-            "color": "danger",
-            "text": msg,
-            "ts": time.time()
+            'fallback': msg,
+            'color': 'danger',
+            'text': msg,
+            'ts': time.time()
         }
     ]
     _hook(attachments)
@@ -50,10 +54,11 @@ def _hook(attachments):
         if _slack is None:
             slack = slackweb.Slack(url=WEBHOOK)
         slack.notify(attachments=attachments)
+        logger.debug('Send message to Slack.')
     else:
-        print 'Set Slack Web incomming webhook link to config.ini!'
+        logger.info('Set Slack Web incomming webhook link to config.ini!')
 
 
 if __name__ == '__main__':
     WEBHOOK = None
-    danger("Cannot read links")
+    danger('Cannot read links')

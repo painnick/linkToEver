@@ -1,3 +1,4 @@
+import logging
 from pyinstapaper.instapaper import Instapaper, Folder
 
 INSTAPAPER_KEY = None
@@ -5,10 +6,14 @@ INSTAPAPER_SECRET = None
 INSTAPAPER_LOGIN = None
 INSTAPAPER_PASSWORD = None
 
+logging.config.fileConfig('log.config')
+logger = logging.getLogger('instapaperLogger')
+
 
 def login():
     _instapaper = Instapaper(INSTAPAPER_KEY, INSTAPAPER_SECRET)
     _instapaper.login(INSTAPAPER_LOGIN, INSTAPAPER_PASSWORD)
+    logger.debug("Login Instapaper.")
     return _instapaper
 
 
@@ -24,3 +29,4 @@ def get_links(instapaper, limit=10):
 
 def archive(bookmark):
     bookmark.archive()
+    logger.debug("Bookmark archived.")
