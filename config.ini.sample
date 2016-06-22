@@ -9,3 +9,6 @@ AUTH_TOKEN = {token}
 
 [Evernote]
 AUTH_TOKEN = {token}
+
+[Slack]
+WEBHOOK = {url}

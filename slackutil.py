@@ -1,31 +1,59 @@
-from slackclient import SlackClient
+import time
 
-AUTH_TOKEN = None
-CHANNEL = None
+import slackweb
 
-
-def login():
-    return SlackClient(AUTH_TOKEN)
+WEBHOOK = None
 
 
-def list_channels(client):
-    channels_call = client.api_call("channels.list")
-    if channels_call['ok']:
-        return channels_call['channels']
-    return None
+def message(title, link):
+    attachments = [
+        {
+            "fallback": "Save links to Evernote.",
+            "color": "good",
+            "title": title,
+            "title_link": link,
+            "text": link
+        }
+    ]
+    _hook(attachments)
 
-def send_message(client, msg):
-    client.api_call(
-        "chat.postMessage",
-        channel=CHANNEL,
-        text=msg,
-        username='pythonbot',
-        icon_emoji=':robot_face:'
-    )
+
+def warning(msg):
+    attachments = [
+        {
+            "fallback": msg,
+            "color": "warning",
+            "text": msg,
+            "ts": time.time()
+        }
+    ]
+    _hook(attachments)
+
+
+def danger(msg):
+    attachments = [
+        {
+            "fallback": msg,
+            "color": "danger",
+            "text": msg,
+            "ts": time.time()
+        }
+    ]
+    _hook(attachments)
+
+
+_slack = None
+
+
+def _hook(attachments):
+    if WEBHOOK is not None and WEBHOOK != '':
+        if _slack is None:
+            slack = slackweb.Slack(url=WEBHOOK)
+        slack.notify(attachments=attachments)
+    else:
+        print 'Set Slack Web incomming webhook link to config.ini!'
+
 
 if __name__ == '__main__':
-    AUTH_TOKEN = 'xoxp-10953545509-10957732498-15510042997-4fde2b151b'
-    CHANNEL = 'C0ATYUSKW'
-    slack_client = login()
-    # print list_channels(slack_client)
-    send_message(slack_client, "%s - %s" % ('Naver', 'http://www.naver.com'))
+    WEBHOOK = None
+    danger("Cannot read links")
