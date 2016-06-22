@@ -93,7 +93,7 @@ def _clean(note, soup, tag):
         if tag.name in ['figure', 'time', 'label']:
             tag.name = 'span'
         # Convert some tags to div tag
-        if tag.name in ['section', 'figcaption', 'main', 'article', 'rel']:
+        if tag.name in ['section', 'figcaption', 'main', 'article', 'rel', 'quote']:
             tag.name = 'div'
 
         # Convert img tag to en-media tag with Evernote resource
