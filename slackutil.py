@@ -34,13 +34,20 @@ def warning(msg):
     _hook(attachments)
 
 
-def danger(msg):
+def danger(msg, e=None):
     attachments = [
         {
             'fallback': msg,
             'color': 'danger',
             'text': msg,
-            'ts': time.time()
+            'ts': time.time(),
+            'fields': [
+                {
+                    'title': 'Exception',
+                    'value': e,
+                    'short': False
+                }
+            ]
         }
     ]
     _hook(attachments)

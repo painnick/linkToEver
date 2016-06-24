@@ -4,6 +4,7 @@
 import ConfigParser
 import logging
 from logging import config
+import traceback
 
 import evernoteutil
 import readabilityutil
@@ -57,8 +58,8 @@ if __name__ == '__main__':
         else:
             logger.info('Read %d link(s) to save', len(_bookmarks))
     except Exception, e:
-        logger.error('Cannot get Instapaper links. %s', e)
-        slackutil.danger('Cannot get Instapaper links.')
+        logger.exception('Cannot get Instapaper links.')
+        slackutil.danger('Cannot get Instapaper links.', traceback.format_exc())
         exit(-1)
 
     for (idx, bookmark) in enumerate(_bookmarks):
@@ -73,7 +74,7 @@ if __name__ == '__main__':
 
             slackutil.message(title, link)
         except Exception, e:
-            logger.error('%s', e)
-            slackutil.danger('Cannot save to Evernote - %s' % title)
+            logger.exception('Cannot save to Evernote - %s' % title)
+            slackutil.danger('Cannot save to Evernote - %s' % title, traceback.format_exc())
 
     logger.info('Complete.')
