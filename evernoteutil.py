@@ -26,7 +26,7 @@ def save(title, url, html):
     logger.debug("============================================================")
     logger.debug("= URL : %s", url)
     logger.debug("------------------------------------------------------------")
-    logger.debug("%s", _enml)
+    logger.debug("ENML\n%s", _enml)
 
     _save(_note_store, _note, _enml)
 
@@ -111,8 +111,11 @@ def _clean(note, soup, tag):
             except URLError as eu:
                 logger.error('Cannot read image - %s : %s', eu, _src)
 
+        if tag.name == 'a' and tag.get('href', None) == '':
+            del tag['href']
+
         # Remove some attributes
-        for attribute in ["class", "id", 'datetime', 'for', 'title', 'tabindex', 'frame', 'rules']:
+        for attribute in ["class", "id", 'datetime', 'for', 'title', 'tabindex', 'frame', 'rules', 'name', 'score']:
             del tag[attribute]
 
         # Remove some tags
