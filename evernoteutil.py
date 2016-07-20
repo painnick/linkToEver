@@ -93,29 +93,30 @@ def _clean(note, soup, tag):
         if tag.name in ['figure', 'time', 'label']:
             tag.name = 'span'
         # Convert some tags to div tag
-        if tag.name in ['section', 'figcaption', 'main', 'article', 'rel', 'quote']:
+        if tag.name in ['section', 'figcaption', 'main', 'article', 'rel', 'quote', 'nobr']:
             tag.name = 'div'
 
         # Convert img tag to en-media tag with Evernote resource
         if tag.name == 'img':
-            # Readability convert srcset-value to src-value
-            _src = tag['src'].split('%20')[0]
-            try:
-                _mime, _hash_hex = _save_image(note, _src)
+            if tag.get('src', None) is not None:
+                # Readability convert srcset-value to src-value
+                _src = tag['src'].split('%20')[0]
+                try:
+                    _mime, _hash_hex = _save_image(note, _src)
 
-                new_tag = soup.new_tag('img')
-                new_tag['type'] = _mime
-                new_tag['hash'] = _hash_hex
-                new_tag.name = 'en-media'
-                tag.replace_with(new_tag)
-            except URLError as eu:
-                logger.error('Cannot read image - %s : %s', eu, _src)
+                    new_tag = soup.new_tag('img')
+                    new_tag['type'] = _mime
+                    new_tag['hash'] = _hash_hex
+                    new_tag.name = 'en-media'
+                    tag.replace_with(new_tag)
+                except URLError as eu:
+                    logger.error('Cannot read image - %s : %s', eu, _src)
 
         if tag.name == 'a' and tag.get('href', None) == '':
             del tag['href']
 
         # Remove some attributes
-        for attribute in ["class", "id", 'datetime', 'for', 'title', 'tabindex', 'frame', 'rules', 'name', 'score']:
+        for attribute in ["class", "id", 'datetime', 'for', 'title', 'tabindex', 'frame', 'rules', 'name', 'score', 'width']:
             del tag[attribute]
 
         # Remove some tags
